@@ -1,0 +1,62 @@
+{% extends 'navbar.html' %}
+
+{% block title %}Add Question | {% endblock title %}
+
+{% block body %}
+<div class="container">
+    <form method="post" action="/addquestion" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="question">Question</label>
+          <input type="text" name="question" class="form-control" id="question" placeholder="Enter question" required>
+        </div>
+        <div class="form-group">
+            <label for="desc">Description</label>
+            <input type="file" name="desc" class="form-control" id="desc">
+        </div>
+        <div class="form-group">
+            <label for="op1">Option 1</label>
+            <input type="text" name="op1" class="form-control" id="op1" placeholder="Enter option 1" required>
+        </div>
+        <div class="form-group">
+            <label for="op2">Option 2</label>
+            <input type="text" name="op2" class="form-control" id="op2" placeholder="Enter option 2" required>
+        </div>
+        <div class="form-group">
+            <label for="op3">Option 3</label>
+            <input type="text" name="op3" class="form-control" id="op3" placeholder="Enter option 3" required>
+        </div>
+        <div class="form-group">
+            <label for="op4">Option 4</label>
+            <input type="text" name="op4" class="form-control" id="op4" placeholder="Enter option 4" required>
+        </div>
+        <div class="form-group">
+            <label for="answer">Answer</label>
+            <input type="text" name="answer" class="form-control" id="answer" placeholder="Enter answer" required>
+        </div>
+        <div class="form-group">
+            <label for="explaination">Explaination</label>
+            <input type="text" name="explaination" class="form-control" id="explaination" placeholder="Enter explaination">
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <br>
+            <select class="form-control" id="category" name="category" required>
+                <option>basic</option>
+                <option>intermediate</option>
+                <option>advance</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="marks">Marks</label>
+            <input type="range" name="marks" id="marks" class="custom-range" min="5" step="5" max="15">
+        </div>
+        <div class="form-group">
+            <label for="marks">Subject</label>
+            <input type="text" name="subject" class="form-control" id="subject" placeholder="Enter subject" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="reset" class="btn btn-danger mx-4">Reset</button>
+      </form>
+</div>
+{% endblock body %}

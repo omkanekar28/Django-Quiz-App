@@ -1,0 +1,91 @@
+{% extends 'navbar.html' %}
+
+{% block title %}DBMS Challenge | {% endblock title %}
+
+{% block body %}
+
+<div class="container">
+
+
+    <form method="post" action="">
+    {% csrf_token %}
+        {%for j in questions_list_basic%}
+    <label hidden for="question_basic{{forloop.counter}}" >answer: </label>
+    <input type="text" hidden name="question_basic{{forloop.counter}}" value="{{j.ans}}" style="border:0px;" >
+    <h4>{{j.question}}</h4>
+    {%if j.desc%}
+        <img src="{{j.desc.url}}">
+    {%endif%}
+    <br>
+    <input type="radio" value="{{j.op1}}" name="answer_basic{{forloop.counter}}">
+    <label for="answer_basic{{forloop.counter}}">{{j.op1}}</label>
+    <br>
+    <input type="radio" value="{{j.op2}}" name="answer_basic{{forloop.counter}}">
+    <label for="answer_basic{{forloop.counter}}">{{j.op2}}</label>
+    <br>
+    <input type="radio" value="{{j.op3}}" name="answer_basic{{forloop.counter}}">
+    <label for="answer_basic{{forloop.counter}}">{{j.op3}}</label>
+    <br>
+    <input type="radio" value="{{j.op4}}" name="answer_basic{{forloop.counter}}">
+    <label for="answer_basic{{forloop.counter}}">{{j.op4}}</label>
+    <br>
+    <label>marks: {{j.marks}}</label>
+    <hr>
+    {%endfor%}
+    
+    {%for k in questions_list_intermediate%}
+    <label for="question_intermediate{{forloop.counter}}" hidden>answer: </label>
+    <input type="text" hidden name="question_intermediate{{forloop.counter}}" value="{{k.ans}}" style="border:0px;">
+    <h4>{{k.question}}</h4>
+    {%if k.desc%}
+        <img src="{{k.desc.url}}">
+    {%endif%}
+    <br>
+    <input type="radio" value="{{k.op1}}" name="answer_intermediate{{forloop.counter}}">
+    <label for="answer_intermediate{{forloop.counter}}">{{k.op1}}</label>
+    <br>
+    <input type="radio" value="{{k.op2}}" name="answer_intermediate{{forloop.counter}}">
+    <label for="answer_intermediate{{forloop.counter}}">{{k.op2}}</label>
+    <br>
+    <input type="radio" value="{{k.op3}}" name="answer_intermediate{{forloop.counter}}">
+    <label for="answer_intermediate{{forloop.counter}}">{{k.op3}}</label>
+    <br>
+    <input type="radio" value="{{k.op4}}" name="answer_intermediate{{forloop.counter}}">
+    <label for="answer_intermediate{{forloop.counter}}">{{k.op4}}</label>
+    <br>
+    <label>marks: {{k.marks}}</label>
+    <hr>
+    {%endfor%}
+    
+    {%for l in questions_list_advance%}
+    <label for="question_advance{{forloop.counter}}" hidden>answer: </label>
+    <input type="text" hidden name="question_advance{{forloop.counter}}" value="{{l.ans}}" style="border:0px;">
+    <h4>{{l.question}}</h4>
+    {%if l.desc%}
+        <img src="{{l.desc.url}}">
+    {%endif%}
+    <br>
+    <input type="radio" value="{{l.op1}}" name="answer_advance{{forloop.counter}}">
+    <label for="answer_advance{{forloop.counter}}">{{l.op1}}</label>
+    <br>
+    <input type="radio" value="{{l.op2}}" name="answer_advance{{forloop.counter}}">
+    <label for="answer_advance{{forloop.counter}}">{{l.op2}}</label>
+    <br>
+    <input type="radio" value="{{l.op3}}" name="answer_advance{{forloop.counter}}">
+    <label for="answer_advance{{forloop.counter}}">{{l.op3}}</label>
+    <br>
+    <input type="radio" value="{{l.op4}}" name="answer_advance{{forloop.counter}}">
+    <label for="answer_advance{{forloop.counter}}">{{l.op4}}</label>
+    <br>
+    <label>marks: {{l.marks}}</label>
+    <hr>
+    {%endfor%}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="reset" class="btn btn-danger mx-4">Reset</button>
+    </form>
+    
+    
+    </div>
+
+    <script src="static/randompage.js"></script>
+{% endblock body %}

@@ -1,0 +1,27 @@
+{% extends 'navbar.html' %}
+
+{% block title %}Results | {% endblock title %}
+
+{% block body %}
+<div class="container">
+    {%if performance_bad %}
+    <h2>Your score is {{score}}/{{total}}</h2>
+    <img src="https://img.freepik.com/premium-photo/red-prohibited-sign-allowed-ban-warning-danger-no-symbol-risk-safety-caution-forbidden-stop-icon-isolated-white-background-with-attention-forbid-illustration-3d-graphic-alert-design_79161-1997.jpg?w=360">
+    <h4>A lot of improvement is needed.</h4>
+    {%endif%}
+    {%if performance_medium %}
+    <h2>Your score is {{score}}/{{total}}</h2>
+    <img src="https://t4.ftcdn.net/jpg/04/61/51/21/360_F_461512195_rBzpceWlGBFjOFr2zSK1Qe5obeY5pRCQ.jpg">
+    <h4>Not bad, but could definitely do better.</h4>
+    {%endif%}
+    {%if performance_good %}
+    <h2>Your score is {{score}}/{{total}}</h2>
+    <img src="https://img.freepik.com/premium-vector/vector-illustration-flat-style-green-check-mark-indicate-right-choice-vote-accept-button_501907-895.jpg?w=360">
+    <h4>Impressive, you have scored extremely well.</h4>
+    {%endif%}
+    <h5>Correct answers: {{correct}}</h5>
+    <h5>Wrong answers: {{wrong}}</h5>
+    <h5>Total questions: 15</h5>
+    <p><a class="btn btn-dark" href="" role="button">Try again</a></p>
+</div>
+{% endblock body %}

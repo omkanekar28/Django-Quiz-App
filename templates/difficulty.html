@@ -1,0 +1,28 @@
+{% extends 'navbar.html' %}
+{% block title %}Select Difficulty | {% endblock title %}
+{% block body %}
+<form method="POST" action="/">
+    {% csrf_token %}
+    <label for="difficulty"><h2>Select the difficulty: </h2></label>
+<select id="difficulty" name="difficulty" class="form-select">
+    <option name="difficulty" value="basic" id="difficulty">basic</option>
+    <option name="difficulty" value="intermediate" id="difficulty">intermediate</option>
+    <option name="difficulty" value="expert" id="difficulty">expert</option>
+  </select>
+  <br>
+  {% if randompage %}
+  <label hidden for="quiz"></label>
+  <input hidden type="text" name="quiz" value="randompage"></input>
+  {%endif%}
+  {% if python %}
+  <label hidden for="quiz"></label>
+  <input hidden type="text" name="quiz" value="python"></input>
+  {%endif%}
+  {% if dbms %}
+  <label hidden for="quiz"></label>
+  <input hidden type="text" name="quiz" value="dbms"></input>
+  {%endif%}
+  <br>
+  <button type="submit" class="btn btn-primary">Go</button>
+</form>
+{% endblock body %}
