@@ -1,0 +1,36 @@
+{% extends 'navbar.html' %}
+{% block title %}Basic Challenge | {% endblock title %}
+{% block body %}
+<div class="container">
+
+
+    <form method="post" action="">
+    {% csrf_token %}
+    {%for j in questions_list_basic%}
+    <label hidden for="question_basic{{forloop.counter}}" >answer: </label>
+    <input type="text" hidden name="question_basic{{forloop.counter}}" value="{{j.ans}}" style="border:0px;" >
+        <h4>{{j.question}}</h4>
+    {%if j.desc%}
+        <img src="{{j.desc.url}}">
+    {%endif%}
+    <br>
+    <input type="radio" value="{{j.op1}}" name="answer_basic{{forloop.counter}}">
+    <label for="answer_basic{{forloop.counter}}">{{j.op1}}</label>
+    <br>
+    <input type="radio" value="{{j.op2}}" name="answer_basic{{forloop.counter}}">
+    <label for="answer_basic{{forloop.counter}}">{{j.op2}}</label>
+    <br>
+    <input type="radio" value="{{j.op3}}" name="answer_basic{{forloop.counter}}">
+    <label for="answer_basic{{forloop.counter}}">{{j.op3}}</label>
+    <br>
+    <input type="radio" value="{{j.op4}}" name="answer_basic{{forloop.counter}}">
+    <label for="answer_basic{{forloop.counter}}">{{j.op4}}</label>
+    <br>
+    <label>marks: {{j.marks}}</label>
+    <hr>
+    {%endfor%}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="reset" class="btn btn-danger mx-4">Reset</button>
+    </form>
+</div>
+{% endblock body %}

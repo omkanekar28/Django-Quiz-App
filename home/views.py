@@ -36,9 +36,8 @@ def randompage(request):
         advance_answers = []
         for i in range(1,4):
            advance_answers.append(request.POST.get("answer_advance"+str(i)))
-        print(basic_answers)
-        print(intermediate_answers)
-        print(advance_answers)
+        correct_answers = 0
+        wrong_answers = 0
 
         score = 0
         counter = 0
@@ -46,6 +45,7 @@ def randompage(request):
         for i in basic_answers:
             if i == basic_answers_c[counter]:
                 score= score + 5
+                correct_answers = correct_answers + 1
             counter = counter + 1
 
         counter = 0
@@ -53,6 +53,7 @@ def randompage(request):
         for i in intermediate_answers:
             if i == intermediate_answers_c[counter]:
                 score= score + 10
+                correct_answers = correct_answers + 1
             counter = counter + 1
 
         counter = 0
@@ -60,9 +61,12 @@ def randompage(request):
         for i in advance_answers:
             if i == advance_answers_c[counter]:
                 score= score + 15
+                correct_answers = correct_answers + 1
             counter = counter + 1
 
         counter = 0 
+
+        wrong_answers = 15 - correct_answers
         
         performance_bad = False
         performance_medium = False
@@ -80,10 +84,11 @@ def randompage(request):
             "performance_medium":performance_medium,
             "performance_good":performance_good,
             "score":score,
+            "correct":correct_answers,
+            "wrong":wrong_answers,
             "total":130
         }
         return render(request, "results.html",context)
-
     questions_basic = QuesModel.objects.filter(category="basic", marks="5")
     questions_basic = list(questions_basic)
 
@@ -357,7 +362,7 @@ def dbms(request):
         for i in range(1,4):
            advance_answers.append(request.POST.get("answer_advance"+str(i)))
 
-        correct_answers = int(0)
+        correct_answers = 0
         wrong_answers = 0
 
         score = 0
@@ -513,8 +518,8 @@ def loginUser(request):
             return redirect("/",)
         else:
             # No backend authenticated the credentials
+            messages.info(request, "Credentials not matching!")
             return render(request, "login.html")
-            messages.error(request, "Credentials not matching!")
     return render(request, "login.html")
 
 def logoutUser(request):
@@ -527,10 +532,18 @@ def RegisterUser(request):
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
         if password != confirm_password:
-            messages.error(request, "password and confirm password fields dont match!")
+            messages.info(request, "password and confirm password fields dont match!")
+            return redirect("register")
+        elif User.objects.filter(username=username).exists():
+            messages.info(request, "username taken")
             return redirect("register")
         user = User.objects.create_user(username=username, password=password)
         user.save()
+
+        user_model = User.objects.get(username=username)
+        new_profile = Profile.objects.create(user=user_model)
+        new_profile.save()
+
         messages.success(request, "The account has been created successfully.")
         return redirect("login")
     return render(request, "register.html")
@@ -540,9 +553,7 @@ def add_question(request):
         return redirect("/")
     if request.method == "POST":
         question = request.POST.get("question")
-        desc = request.POST.get("desc")
-        print(desc.name)
-        print(desc.size)
+        desc = request.FILES.get("desc")
         op1 = request.POST.get("op1")
         op2 = request.POST.get("op2")
         op3 = request.POST.get("op3")
@@ -565,57 +576,213 @@ def results(request):
     else:
         return render(request, "results.html")
 
-def randompage_difficulty(request):
+def basic(request):
     if request.user.is_anonymous:
         return redirect("/login")
-    elif request.method == "POST":
-        difficulty = request.POST.get("difficulty")
-        quiz = request.POST.get("quiz")
-        print(difficulty)
-        print(quiz)
-        if quiz == "randompage":
-            if difficulty == "basic":
-                return render(request, "randompage_basic.html")
-            elif difficulty == "intermediate":
-                return render(request, "randompage_intermediate.html")
-            else:
-                return render(request, "randompage_expert.html")
-        elif quiz == "python":
-            if difficulty == "basic":
-                return render(request, "python_basic.html")
-            elif difficulty == "intermediate":
-                return render(request, "python_intermediate.html")
-            else:
-                return render(request, "python_expert.html")
+    if request.method == "POST":
+        basic_answers_c = []
+        for i in range(1,16):
+           basic_answers_c.append(request.POST.get("question_basic"+str(i)))
+        print(basic_answers_c)
+
+        basic_answers = []
+        for i in range(1,16):
+           basic_answers.append(request.POST.get("answer_basic"+str(i)))
+        print(basic_answers)
+
+        score = 0
+        counter = 0
+
+        correct_answers = 0
+        wrong_answers = 0
+        
+        for i in basic_answers:
+            if i == basic_answers_c[counter]:
+                correct_answers = correct_answers + 1
+                score= score + 5
+            counter = counter + 1
+        
+        wrong_answers = 15 - correct_answers
+
+        performance_bad = False
+        performance_medium = False
+        performance_good = False
+
+        if score <= 20:
+            performance_bad = True
+        elif score <= 50:
+            performance_medium = True
         else:
-            if difficulty == "basic":
-                return render(request, "dbms_basic.html")
-            elif difficulty == "intermediate":
-                return render(request, "dbms_intermediate.html")
-            else:
-                return render(request, "dbms_expert.html")
+            performance_good = True
 
-    else:
         context = {
-            'randompage':True,
+            "correct":correct_answers,
+            "wrong":wrong_answers,
+            "performance_bad":performance_bad,
+            "performance_medium":performance_medium,
+            "performance_good":performance_good,
+            "score":score,
+            "total":75
         }
-        return render(request, "difficulty.html",context)
+        return render(request, "results.html",context)
 
-def python_difficulty(request):
+    questions_basic = QuesModel.objects.filter(category="basic", marks="5")
+    questions_basic = list(questions_basic)
+    random.shuffle(questions_basic)
+    questions_basic_new = []
+    for i in range(0,15):
+        questions_basic_new.append(questions_basic[i])
+    context = {
+        "questions_list_basic":questions_basic_new,
+    }
+    return render(request, "basic.html",context)
+
+
+
+def intermediate(request):
     if request.user.is_anonymous:
         return redirect("/login")
-    else:
-        context = {
-            'python':True,
-        }
-        return render(request, "difficulty.html",context)
+    if request.method == "POST":
+        intermediate_answers_c = []
+        for i in range(1,16):
+           intermediate_answers_c.append(request.POST.get("question_intermediate"+str(i)))
+        print(intermediate_answers_c)
 
-def dbms_difficulty(request):
+        intermediate_answers = []
+        for i in range(1,16):
+           intermediate_answers.append(request.POST.get("answer_intermediate"+str(i)))
+        print(intermediate_answers)
+
+        score = 0
+        counter = 0
+
+        correct_answers = 0
+        wrong_answers = 0
+        
+        for i in intermediate_answers:
+            if i == intermediate_answers_c[counter]:
+                correct_answers = correct_answers + 1
+                score= score + 10
+            counter = counter + 1
+        
+        wrong_answers = 15 - correct_answers
+
+        performance_bad = False
+        performance_medium = False
+        performance_good = False
+
+        if score <= 40:
+            performance_bad = True
+        elif score <= 100:
+            performance_medium = True
+        else:
+            performance_good = True
+
+        context = {
+            "correct":correct_answers,
+            "wrong":wrong_answers,
+            "performance_bad":performance_bad,
+            "performance_medium":performance_medium,
+            "performance_good":performance_good,
+            "score":score,
+            "total":150
+        }
+        return render(request, "results.html",context)
+    questions_intermediate = QuesModel.objects.filter(category="intermediate", marks="10")
+    questions_intermediate = list(questions_intermediate)
+    random.shuffle(questions_intermediate)
+    questions_intermediate_new = []
+    for i in range(0,15):
+        questions_intermediate_new.append(questions_intermediate[i])
+    context = {
+        "questions_list_intermediate":questions_intermediate_new,
+    }
+    return render(request, "intermediate.html",context)
+
+def expert(request):
     if request.user.is_anonymous:
         return redirect("/login")
-    else:
-        context = {
-            'dbms':True,
-        }
-        return render(request, "difficulty.html",context)
+    if request.method == "POST":
+        expert_answers_c = []
+        for i in range(1,16):
+           expert_answers_c.append(request.POST.get("question_expert"+str(i)))
+        print(expert_answers_c)
 
+        expert_answers = []
+        for i in range(1,16):
+           expert_answers.append(request.POST.get("answer_expert"+str(i)))
+        print(expert_answers)
+
+        score = 0
+        counter = 0
+
+        correct_answers = 0
+        wrong_answers = 0
+        
+        for i in expert_answers:
+            if i == expert_answers_c[counter]:
+                correct_answers = correct_answers + 1
+                score= score + 15
+            counter = counter + 1
+        
+        wrong_answers = 15 - correct_answers
+
+        performance_bad = False
+        performance_medium = False
+        performance_good = False
+
+        if score <= 60:
+            performance_bad = True
+        elif score <= 150:
+            performance_medium = True
+        else:
+            performance_good = True
+
+        context = {
+            "correct":correct_answers,
+            "wrong":wrong_answers,
+            "performance_bad":performance_bad,
+            "performance_medium":performance_medium,
+            "performance_good":performance_good,
+            "score":score,
+            "total":225
+        }
+        return render(request, "results.html",context)
+    questions_expert = QuesModel.objects.filter(category="advance", marks="15")
+    questions_expert = list(questions_expert)
+    random.shuffle(questions_expert)
+    questions_expert_new = []
+    for i in range(0,15):
+        questions_expert_new.append(questions_expert[i])
+    context = {
+        "questions_list_expert":questions_expert_new,
+    }
+    return render(request, "expert.html",context)
+
+def profile(request):
+    if request.user.is_anonymous:
+        return redirect("/login")
+    if request.method == "POST":
+        fname = request.POST.get("fname")
+        lname = request.POST.get("lname")
+        email_id = request.POST.get("email_id")
+        bio = request.POST.get("bio")
+        profileimg = request.FILES.get("profileimg")
+        location = request.POST.get("location")
+
+        user_profile = Profile.objects.get(user=request.user)
+
+        if profileimg != None:
+            user_profile.profileimg = profileimg
+
+        user_profile.fname = fname
+        user_profile.lname = lname
+        user_profile.email_id = email_id
+        user_profile.bio = bio
+        user_profile.location = location
+
+        user_profile.save()
+    context = {
+        "profile":Profile.objects.get(user=request.user)
+    }
+    return render(request, "profile.html",context)

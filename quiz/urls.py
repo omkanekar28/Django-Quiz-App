@@ -30,11 +30,16 @@ urlpatterns = [
     path('randompage', views.randompage, name="randompage"),
     path('python', views.python, name="python"),
     path('dbms', views.dbms, name="dbms"),
+    path('basic', views.basic, name="basic"),
+    path('intermediate', views.intermediate, name="intermediate"),
+    path('expert', views.expert, name="expert"),
     path('results', views.results, name="results"),
+    path('profile', views.profile, name="profile"),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns = urlpatterns+static(settings.MEDIA_URL,
+document_root=settings.MEDIA_ROOT)
+
 
 admin.site.site_header = "Quizzies Admin"
 admin.site.site_title = "Quizzies Admin Portal"

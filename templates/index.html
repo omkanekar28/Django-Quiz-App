@@ -2,6 +2,7 @@
 
 {% block body %}
 <div class="container"><h1>Hello {{request.user}}</h1>
+  
   <div class="container my-4">
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -46,6 +47,25 @@
 
       <!-- Three columns of text below the carousel -->
       <div class="row">
+        <div class="col-lg-4">
+          <img src="https://htmlcolorcodes.com/assets/images/colors/grass-green-color-solid-background-1920x1080.png" height="150px" width="150px">
+          <h2>Basic</h2>
+          <p>Recommended for beginners.</p>
+          <p><a class="btn btn-dark" href="/basic" role="button">Start Quiz »</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <img src="https://www.macmillandictionary.com/external/slideshow/full/Yellow_full.png" height="150px" width="150px">
+          <h2>Intermediate</h2>
+          <p>A slight increase in challenge.</p>
+          <p><a class="btn btn-dark" href="/intermediate" role="button">Start Quiz »</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <img src="https://colourlex.com/wp-content/uploads/2021/02/Chrome-red-painted-swatch-N-300x300.jpg" height="150px" width="150px">
+          <h2>Expert</h2>
+          <p>Only the experienced programmers can crack this challenge.</p>
+          <p><a class="btn btn-dark" href="/expert" role="button">Start Quiz »</a></p>
+          <br>
+        </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
           <img src="https://i.pinimg.com/originals/05/5b/a9/055ba99aaffbabe3b1387376a77aff76.png" height="150px" width="150px">
           <h2>Random</h2>
