@@ -23,10 +23,6 @@ def randompage(request):
         advance_answers_c = []
         for i in range(1,4):
            advance_answers_c.append(request.POST.get("question_advance"+str(i)))
-        print(basic_answers_c)
-        print(intermediate_answers_c)
-        print(advance_answers_c)
-
         basic_answers = []
         for i in range(1,8):
            basic_answers.append(request.POST.get("answer_basic"+str(i)))
@@ -80,6 +76,12 @@ def randompage(request):
             performance_good = True
 
         context = {
+            "basic_ans":basic_answers,
+            "basic_ans_c":basic_answers_c,
+            "intermediate_ans":intermediate_answers,
+            "intermediate_ans_c":intermediate_answers_c,
+            "advance_ans":advance_answers,
+            "advance_ans_c":advance_answers_c,
             "performance_bad":performance_bad,
             "performance_medium":performance_medium,
             "performance_good":performance_good,
@@ -168,7 +170,6 @@ def randompage(request):
     
     questions_advance_new = [question_advance_1, question_advance_2, question_advance_3]
 
-    print(questions_advance_new)
 
     context={'questions_list_basic':questions_basic_new,
             'questions_list_intermediate':questions_intermediate_new,
@@ -190,9 +191,6 @@ def python(request):
         advance_answers_c = []
         for i in range(1,4):
            advance_answers_c.append(request.POST.get("question_advance"+str(i)))
-        print(basic_answers_c)
-        print(intermediate_answers_c)
-        print(advance_answers_c)
 
         basic_answers = []
         for i in range(1,8):
@@ -203,9 +201,6 @@ def python(request):
         advance_answers = []
         for i in range(1,4):
            advance_answers.append(request.POST.get("answer_advance"+str(i)))
-        print(basic_answers)
-        print(intermediate_answers)
-        print(advance_answers)
 
         score = 0
         counter = 0
@@ -243,6 +238,12 @@ def python(request):
             performance_good = True
 
         context = {
+            "basic_ans":basic_answers,
+            "basic_ans_c":basic_answers_c,
+            "intermediate_ans":intermediate_answers,
+            "intermediate_ans_c":intermediate_answers_c,
+            "advance_ans":advance_answers,
+            "advance_ans_c":advance_answers_c,
             "performance_bad":performance_bad,
             "performance_medium":performance_medium,
             "performance_good":performance_good,
@@ -348,9 +349,6 @@ def dbms(request):
         advance_answers_c = []
         for i in range(1,4):
            advance_answers_c.append(request.POST.get("question_advance"+str(i)))
-        print(basic_answers_c)
-        print(intermediate_answers_c)
-        print(advance_answers_c)
 
         basic_answers = []
         for i in range(1,8):
@@ -405,10 +403,13 @@ def dbms(request):
         else:
             performance_good = True
 
-        print(correct_answers)
-        print(wrong_answers)
-
         context = {
+            "basic_ans":basic_answers,
+            "basic_ans_c":basic_answers_c,
+            "intermediate_ans":intermediate_answers,
+            "intermediate_ans_c":intermediate_answers_c,
+            "advance_ans":advance_answers,
+            "advance_ans_c":advance_answers_c,
             "performance_bad":performance_bad,
             "performance_medium":performance_medium,
             "performance_good":performance_good,
@@ -503,7 +504,14 @@ def dbms(request):
 def index(request):
     if request.user.is_anonymous:
         return redirect("/login")
-    return render(request, "index.html")
+    
+    profiles = Profile.objects.all()
+    current = request.user
+    context = {
+        "profiles":profiles,
+        "current":current
+    }
+    return render(request, "index.html", context)
 
 def loginUser(request):
     if request.user.is_authenticated:
@@ -583,12 +591,10 @@ def basic(request):
         basic_answers_c = []
         for i in range(1,16):
            basic_answers_c.append(request.POST.get("question_basic"+str(i)))
-        print(basic_answers_c)
 
         basic_answers = []
         for i in range(1,16):
            basic_answers.append(request.POST.get("answer_basic"+str(i)))
-        print(basic_answers)
 
         score = 0
         counter = 0
@@ -616,6 +622,8 @@ def basic(request):
             performance_good = True
 
         context = {
+            "basic_ans":basic_answers,
+            "basic_ans_c":basic_answers_c,
             "correct":correct_answers,
             "wrong":wrong_answers,
             "performance_bad":performance_bad,
@@ -646,12 +654,9 @@ def intermediate(request):
         intermediate_answers_c = []
         for i in range(1,16):
            intermediate_answers_c.append(request.POST.get("question_intermediate"+str(i)))
-        print(intermediate_answers_c)
-
         intermediate_answers = []
         for i in range(1,16):
            intermediate_answers.append(request.POST.get("answer_intermediate"+str(i)))
-        print(intermediate_answers)
 
         score = 0
         counter = 0
@@ -679,6 +684,8 @@ def intermediate(request):
             performance_good = True
 
         context = {
+            "intermediate_ans":intermediate_answers,
+            "intermediate_ans_c":intermediate_answers_c,
             "correct":correct_answers,
             "wrong":wrong_answers,
             "performance_bad":performance_bad,
@@ -706,12 +713,9 @@ def expert(request):
         expert_answers_c = []
         for i in range(1,16):
            expert_answers_c.append(request.POST.get("question_expert"+str(i)))
-        print(expert_answers_c)
-
         expert_answers = []
         for i in range(1,16):
            expert_answers.append(request.POST.get("answer_expert"+str(i)))
-        print(expert_answers)
 
         score = 0
         counter = 0
@@ -739,6 +743,8 @@ def expert(request):
             performance_good = True
 
         context = {
+            "advance_ans":expert_answers,
+            "advance_ans_c":expert_answers_c,
             "correct":correct_answers,
             "wrong":wrong_answers,
             "performance_bad":performance_bad,
